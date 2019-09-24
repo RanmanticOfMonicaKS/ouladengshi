@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+  <link rel="stylesheet" type="text/css" href="../css/api.css" />
+  	<link rel="stylesheet" type="text/css" href="../css/style.css" />
+  	<link rel="stylesheet" href="../css/aui.2.0.css">
+  	<link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css" />
+  <title>Document</title>
+  <style media="screen">
+        body {
+          background-color: #59493f;
+        }
+      .ys-info-item {
+        background-color: #dfc7af;
+        margin-bottom: 10px;
+        border-radius: 10px;
+        padding: 5px;
+        box-shadow:-3px 3px 0px lightyellow;
+      }
+
+      .ys-ret {
+        padding-left: 10px;
+        background-color: gold;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        box-shadow:-1px 1px 0px lightyellow;
+      }
+      .aui-col-xs-6 {
+        background-color: #dfc7af;
+
+      }
+      .aui-row-padded [class*=aui-col-xs-] {
+        padding: 5px 0px 5px 10px;
+        color:#252525;
+      }
+      .aui-col-xs-6 i {
+        font-style: normal;
+        color:chocolate;
+      }
+      .tempList {
+          margin-bottom: 10px;
+      }
+      .blank {
+          position: relative;
+          height:50px;
+          background-color: #59493f;
+      }
+      .blank > .text {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          padding: 10px;
+          font-size: 16px;
+          color:#dfc7af;
+      }
+  </style>
+</head>
+<body>
+  <div class="tempList ">
+
+</div>
+<!-- NOTE: 底部增加一个空白表示数据已经加载完毕 -->
+
+
+</body>
+<script src="../script/api.js" charset="utf-8"></script>
+<script src="../plugins/doT.min.js" charset="utf-8"></script>
+<script src="../plugins/jquery/jquery-1.9.1.min.js" charset="utf-8"></script>
+<script id="tempList" type="text/x-dot-template">
+{{? it.data.page == 1}}
+  <div class="ys-ret">搜索结果如下：</div>
+  {{?}}
+  <ul>
+  {{~it.data.records:value:index }}
+    <li class="ys-info-item  aui-row-padded clearfix">
+      <span class="aui-col-xs-6">品牌名称：<i>{{= value.ppname }}</i></span>
+      <span class="aui-col-xs-6">订单编号：<i>{{= value.ddid }}</i> </span>
+      <span class="aui-col-xs-6">商品数量：<i>{{= value.ddnum }}</i> </span>
+      <span class="aui-col-xs-6">订单状态：<i>{{= value.ddstatus }}</i> </span>
+    </li>
+    {{~ }}
+
+  </ul>
+  {{? !it.data.records.length}}
+  <div class="blank">
+      <div class="text">
+        没有更多了哟~~~
+      </div>
+  </div>
+  {{?}}
+</script>
+<script>
+    apiready =function () {
+
+    }
+
+    // 拿到数据添加数据的方法，渲染模板
+    function goToTemp(tempData) {
+
+      console.log(JSON.stringify(tempData));
+      //  tempData ={data :api.pageParam.data};
+      var tmpText = doT.template($('#tempList').text());
+      $('.tempList').append(tmpText(tempData));
+
+    }
+    //筛选数据的方法
+    function goToSelected(tempData) {
+      var tmpText = doT.template($('#tempList').text());
+      $('.tempList').html(tmpText(tempData));
+    }
+</script>
+</html>

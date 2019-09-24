@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>价格设置</title>
+		<link rel="stylesheet" type="text/css" href="../css/api.css"/>
+		<link rel="stylesheet" href="../css/aui.2.0.css">
+		<link rel="stylesheet" type="text/css" href="../css/style.css" />
+		<link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css"/>
+		<style>
+
+			#wrap {
+				position: relative;
+				box-sizing: border-box;
+				background: #f0f2f5;
+				background-color: #000;
+			}
+			.shouPP {
+					position: absolute;
+					bottom: 0;
+					width: 100%;
+					background-size: cover;
+			}
+
+		</style>
+	</head>
+	<body>
+		<div id="wrap" class="flex-wrap flex-vertical" >
+			<div class="header">
+				<!-- 这里b元素不能够居中的原因，跟网页的的差别，在于fixStatusBar给header添加了内边距吧 -->
+				<i tapmode onclick="api.closeWin();" class="fa fa-arrow-left"></i>
+				<div class="title">
+					价格设置
+				</div>
+			</div>
+				<div class="flex-con" id="main">
+			</div>
+
+				<div class="shouPP">
+				</div>
+
+			</div>
+		<script id="tempList" type="text/x-dot-template">
+			<ul class="price_list">
+					{{ ~it.data:value:index}}
+					<li>
+						<span>品牌名称：{{ =value.pp_name }}</span>
+						<span>品牌编号： {{ =value.dd_num }} </span>
+						<span>品牌价格： {{ =value.dd_num }} / 件</span>
+						<div class="aui-bar aui-bar-btn aui-bar-btn-round" style="width:45%;">
+								<div class="aui-bar-btn-item aui-active">增加商品</div>
+								<div class="aui-bar-btn-item">修改价格</div>
+						</div>
+					</li>
+					{{~}}
+				</ul>
+		</script>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../plugins/doT.min.js"></script>
+	<script type="text/javascript" src="../plugins/jquery/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="../script/common.js"></script>
+	<script src="../script/sy_menu_price.js"></script>
+	<script type="text/javascript">
+
+	</script>
+</html>

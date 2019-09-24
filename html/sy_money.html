@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+	<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+	<link rel="stylesheet" type="text/css" href="../css/api.css" />
+	<link rel="stylesheet" type="text/css" href="../css/style.css" />
+	<link rel="stylesheet" href="../css/aui.2.0.css">
+	<link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css" />
+	<title>财务报表</title>
+	<style>
+		body {
+			background-color: #fff;
+		}
+		.ys-info-item {
+			background-color: #dfc7af;
+			margin-bottom: 10px;
+			border-radius: 10px;
+			padding: 5px;
+			box-shadow:-3px 3px 0px lightyellow;
+		}
+
+		.ys-ret {
+			padding-left: 10px;
+			background-color: gold;
+			margin-bottom: 10px;
+			border-radius: 5px;
+			box-shadow:-1px 1px 0px lightyellow;
+		}
+		.aui-col-xs-6 {
+			background-color: #dfc7af;
+
+		}
+		.aui-row-padded [class*=aui-col-xs-] {
+			padding: 5px 0px 5px 10px;
+			color:#252525;
+		}
+		.aui-col-xs-6 i {
+			font-style: normal;
+			color:chocolate;
+		}
+		.tempList {
+			padding: 20px 10px 0px 10px;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="wrap" class="">
+		<div class="header">
+			<i tapmode onclick="closeWin();"></i>
+			<div class="title">
+				财务报表
+			</div>
+		</div>
+		<div class="" id="main">
+			<div class="chart" id="chart" style="height: 400px">
+			</div>
+			<div class="tempList">
+
+			</div>
+		</div>
+</body>
+<script type="text/template" id="tempList">
+	<ul>
+	{{~it.data:value:index }}
+		<li class="ys-info-item  aui-row-padded clearfix">
+			<span class="aui-col-xs-6">品牌名称：<i>{{= value.ppname }}</i></span>
+			<span class="aui-col-xs-6">订单编号：<i>{{= value.ddid }}</i> </span>
+			<span class="aui-col-xs-6">订购数量：<i>{{= value.ddnum }}</i> </span>
+			<span class="aui-col-xs-6">订单状态：<i>{{= value.ddstatus }}</i> </span>
+		</li>
+		{{~ }}
+
+	</ul>
+</script>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../plugins/jquery/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="../script/common.js"></script>、
+<script src="../plugins/echarts.min.js"></script>
+<script src="../plugins/doT.min.js" charset="utf-8"></script>
+
+<script>
+	var myChart;
+	// 已收入
+	var Inmoney;
+	// 预计收入
+	var Prmoney;
+	// 定金
+	var Dmoney;
+	apiready = function() {
+		$api.fixStatusBar($api.dom('.header'));
+		showEcharts();
+	}
+
+	// 基于准备好的dom，初始化echarts实例
+
+	// 生成表格的方法
+	function showEcharts() {
+
+		var option;
+		var data;
+		 myChart = echarts.init(document.getElementById('chart'), 'vintage');
+		api.ajax({
+				url: apiAddress + 'api.do',
+				method: 'post',
+				data: {
+					body: {
+						gb_name: 'queryBiz.list#ks_getDDInfo_byCondition'
+					}
+				}
+			},
+			function(ret, err) {
+				if (ret) {
+					data = ret.param_info.records;
+					console.log(JSON.stringify(data));
+					// 	渲染模板
+						tempData = {
+									data: ret.param_info.records
+							};
+							var tmpText = doT.template($('#tempList').text());
+							$('.tempList').html(tmpText(tempData));
+
+					// 已收入的金额
+					var data1 = data.filter(item => item.ddstatus == '已完成');
+					console.log(JSON.stringify(data1) + '1111111111111111111');
+
+					data1.forEach(item => {
+							Inmoney = 0;
+							Inmoney += Number(item.ppprice) * Number(item.ddnum);
+						})
+						var data3 = data.filter(item => item.ddstatus == '未完成');
+						console.log(JSON.stringify(data3) + '33333333333');
+
+						data3.forEach(item => {
+								Dmoney = 0;
+								Dmoney += Number(item.ppprice) * Number(item.ddnum)*0.5;
+							})
+						// 预计收入金额
+					var data2 = data.filter(item => item.ddstatus == '预订');
+					console.log(JSON.stringify(data2) + '22222222222222222');
+					data2.forEach(item => {
+						Prmoney = 0;
+						Prmoney += Number(item.ppprice) * Number(item.ddnum);
+
+					})
+					console.log(JSON.stringify(Inmoney));
+					console.log(JSON.stringify(Prmoney));
+					console.log(JSON.stringify(Dmoney));
+					option = {
+						backgroundColor: '#2c343c',
+
+						title: {
+							text: '收入情况',
+							left: 'center',
+							top: 20,
+							textStyle: {
+								color: '#ccc'
+							}
+						},
+
+						tooltip: {
+							show: true,
+							trigger: 'item',
+							formatter: "{a} <br/>{b} : {c} ({d}%)"
+						},
+						color: ['#dd6b66', '#759aa0', '#e69d87', '#8dc1a9', '#ea7e53', '#eedd78', '#73a373', '#73b9bc', '#7289ab', '#91ca8c', '#f49f42'],
+						visualMap: {
+							show: true,
+							min: 80,
+							max: 600,
+							inRange: {
+								colorLightness: [0, 1]
+							}
+						},
+						series: [{
+							name: '收入占比',
+							type: 'pie',
+							radius: '55%',
+							center: ['50%', '50%'],
+							data: [{
+								value: Inmoney,
+								name: '已收入'
+							}, {
+								value: Prmoney,
+								name: '预收入'
+							},{
+								value: Dmoney,
+								name: '定金收入'
+							} ].sort(function(a, b) {
+								return a.value - b.value;
+							}),
+							roseType: 'radius',
+							label: {
+								normal: {
+									textStyle: {
+										color: 'rgba(255, 255, 255, 0.8)'
+									}
+								}
+							},
+							labelLine: {
+								normal: {
+									lineStyle: {
+										color: 'rgba(255, 255, 255, 0.8)'
+									},
+									smooth: 0.2,
+									length: 10,
+									length2: 20
+								}
+							},
+							itemStyle: {
+								normal: {
+									shadowBlur: 200,
+									shadowColor: 'rgba(0, 0, 0, 0.5)'
+								}
+							},
+
+							animationType: 'scale',
+							animationEasing: 'elasticOut',
+							animationDelay: function(idx) {
+								return Math.random() * 200;
+							}
+						}]
+					};
+					myChart.setOption(option);
+				}
+			});
+
+		// console.log(JSON.stringify(Inmoney),JSON.stringify(Prmoney));
+
+
+
+	// 注册点击事件，点击下方展示详情
+	myChart.on('click',function(params) {
+			  //  alert("单击了"+params.componentType+"x轴标签"+params.value+';'+params.name);
+				// 处理param.name的数据对应
+
+			var ddStatus = params.name;
+		var getDdStatus	= ddStatus => {
+				var a ;
+				switch (ddStatus) {
+					case '已收入':
+						a = '已完成'
+						break;
+						case '预收入':
+							a = '未完成'
+							break;
+							case '定金收入':
+								a = '预订'
+								break;
+				}
+				return a;
+			}
+			ddStatus = getDdStatus(ddStatus);
+			console.log(JSON.stringify(ddStatus));
+			// 发送ajax得到数据
+			api.ajax({
+			    url: apiAddress+'api.do',
+			    method: 'post',
+			    data: {
+						body:{
+							gb_name: 'queryBiz.list#ks_getDDInfo_byCondition',
+							param_info: {
+									ddStatus
+							}
+
+						}
+			    }
+			},function(ret, err){
+			    if (ret) {
+						console.log(JSON.stringify(ret));
+							tempData = {
+									data: ret.param_info.records
+							};
+							var tmpText = doT.template($('#tempList').text());
+							$('.tempList').html(tmpText(tempData));
+			    } else {
+			        alert( JSON.stringify( err ) );
+			    }
+			});
+
+	})
+}
+
+	// 指定图表的配置项和数据
+</script>
+
+</html>

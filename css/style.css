@@ -1,0 +1,118 @@
+html,
+body {
+    font-size: 12px;
+    height: 100%;
+    font-family: sans-serif;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+}
+
+html {
+    font-size: 20px;
+}
+
+@media only screen and (min-width: 400px) {
+    html {
+        font-size: 21.33333333px !important;
+    }
+}
+
+@media only screen and (min-width: 414px) {
+    html {
+        font-size: 22.08px !important;
+    }
+}
+
+@media only screen and (min-width: 480px) {
+    html {
+        font-size: 25.6px !important;
+    }
+}
+
+
+
+
+.clearfix:after {
+    content: '';
+    display: block;
+    clear: both;
+}
+.flex-wrap {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+}
+
+.flex-con {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    overflow: hidden;
+    flex: 1;
+}
+
+.flex-vertical {
+    -webkit-box-orient: vertical;
+    -webkit-flex-flow: column;
+    flex-flow: column;
+}
+
+.flex-horizontal {
+    -webkit-box-orient: horizontal;
+    -webkit-flex-flow: row;
+    flex-flow: row;
+}
+
+#wrap {
+    height: 100%;
+}
+
+#main {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+}
+input {
+  outline-color: invert;
+  border: none;
+  text-shadow: none;
+  -webkit-appearance: none;
+  -webkit-user-select: text;
+  outline-color: transparent;
+}
+
+/** 标题start **/
+
+.header {
+    background-color: #59493f;
+    line-height: 50px;
+    height: 50px;
+    width: 100%;
+    color: #fff;
+    position: relative;;
+    letter-spacing:0.1rem;
+    z-index:999;
+}
+
+.header i {
+    display: inline-block;
+    width: 42px;
+    height: 100%;
+    z-index: 1;
+    padding: 0 20px;
+    font-size: 18px;
+    position: absolute;;
+    bottom:-20px;
+    /*top:-20px;*/
+}
+
+
+
+.header .title {
+    position: absolute;
+    left: 50%;
+    top:10px;
+    height:100%;
+    font-size: 18px;
+    font-weight: 500;
+    color: #fff;
+    transform: translate(-50%,0);
+}

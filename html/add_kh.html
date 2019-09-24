@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>信息查询</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/aui.2.0.css">
+    <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css" />
+    <style>
+        #main {
+            background: #dfc7af;
+            color: #252525;
+        }
+
+        body {
+            background-color: #dfc7af;
+        }
+        /* mian部分 */
+
+        .aui-list .aui-list-header {
+            background-color: #59493f;
+            color: #dfc7af;
+        }
+
+        .aui-list .aui-list-item {
+            background-color: #dfc7af;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .aui-list .aui-list-item div {
+            color: #59493f;
+        }
+
+        .aui-tab-item {
+            color: #59493f;
+            background-color: #dfc7af;
+        }
+
+        .aui-bar-btn-item.aui-active {
+            background-color: #59493f;
+        }
+
+        .aui-list .aui-list-item.last {
+            border-bottom: 0;
+        }
+
+        .aui-bar-btn-item {
+            width: 50%;
+            height: 50px;
+            font-size: 18px;
+            font-weight: 700;
+            border: 1px solid #59493f;
+            background-color: #dfc7af;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            z-index: 9;
+        }
+
+        .footer .aui-bar-btn {
+            position: relative;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrap">
+        <div class="header">
+            <i tapmode onclick="api.closeWin();" class="fa fa-arrow-left"></i>
+            <div class="title">
+                录入客户信息
+            </div>
+        </div>
+        <div id="main">
+            <form class="" method="post" id="ddForm">
+                <div class="aui-content aui-margin-b-15">
+                    <ul class="aui-list aui-form-list">
+                        <li class="aui-list-header">输入客户信息</li>
+                        <li class="aui-list-item">
+                            <div class="aui-list-item-inner">
+                                <div class="aui-list-item-label">
+                                    客户名称
+                                </div>
+                                <div class="aui-list-item-input">
+                                    <input type="text" placeholder="请输入客户名称" autofocus name="khName" class="khName">
+                                </div>
+                            </div>
+                        </li>
+                        <li class="aui-list-item">
+                            <div class="aui-list-item-inner">
+                                <div class="aui-list-item-label">
+                                    客户编号：
+                                </div>
+                                <div class="aui-list-item-input">
+                                    <input type="text" placeholder="请输入客户编号" autofocus name="khId" class="khId">
+                                </div>
+                            </div>
+                        </li>
+                        <li class="aui-list-item">
+                            <div class="aui-list-item-inner">
+                                <div class="aui-list-item-label">
+                                    客户地址：
+                                </div>
+                                <div class="aui-list-item-input">
+                                    <input type="text" placeholder="请输入客户地址" name="goAddress" class="goAddress">
+                                </div>
+                            </div>
+                        </li>
+                        <li class="aui-list-item">
+                            <div class="aui-list-item-inner">
+                                <div class="aui-list-item-label">
+                                    客户余额：
+                                </div>
+                                <div class="aui-list-item-input">
+                                  <input type="number" placeholder="请输入余额" name="khYue" class="khYue">
+                                </div>
+                            </div>
+                        </li>
+                        <li class="aui-list-item">
+                            <div class="aui-list-item-inner">
+                                <div class="aui-list-item-label">
+                                    客户经理：
+                                </div>
+                                <div class="aui-list-item-input">
+                                    <input type="text" placeholder="请输入客户经理'" name="khJingli" class="khJingli">
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class="aui-list-item last">
+                            <div class="aui-list-item-inner">
+                                <div class="aui-list-item-label last">
+                                    备注：
+                                </div>
+                                <div class="aui-list-item-input">
+                                    <textarea placeholder="" name="khBz" class="khBz"></textarea>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+        </div>
+        </form>
+        <div class="footer">
+            <!-- 底部确认取消按钮 -->
+            <div class="aui-bar aui-bar-btn" style="width:100%;">
+                <div class="aui-bar-btn-item aui-active" onclick="addDD();">确认</div>
+                <div class="aui-bar-btn-item" tapmode onclick='cancelInput()'>取消</div>
+            </div>
+
+        </div>
+
+    </div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../plugins/jquery/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="../script/common.js"></script>
+<script type="text/javascript">
+    var ppNames = ['光之梦', '海之蓝', '天之痕', '水之皓'];
+    apiready = function() {
+        $api.fixStatusBar($api.dom('.header'));
+        api.parseTapmode();
+
+    }
+
+    function addDD() {
+        console.log('666');
+        var formDate = $('#ddForm').serializeObject();
+        console.log(JSON.stringify(formDate));
+        // 表单验证
+        if (!formDate.khName) return alert('请输入客户名称');
+        if (!formDate.khId) return alert('请输入客户名称');
+        if (!formDate.goAddress) return alert('请输入用户地址')
+        if (!formDate.khJingli) return alert('请输入客户经理');
+        if (!formDate.khYue)  formDate.khYue = 0;
+
+        formDate.khDate = new Date();
+        api.ajax({
+            url: apiAddress + 'gb/save.do',
+            method: 'post',
+            tag:'kh',
+            data: {
+                body: {
+                    tbname: 'kh_info',
+                    khName: formDate.khName,
+                    khId: formDate.khId,
+                    khJingli: formDate.khJingli,
+                    goAddress:formDate.goAddress,
+                    khYue: formDate.khYue,
+                    khDate: formDate.khDate,
+                    khBz: formDate.khBz
+                }
+            }
+        }, function(ret, err) {
+            if (ret) {
+                if (ret.status == '0') {
+                    api.toast({
+                        msg: '客户'+ formDate.khName +'已成功添加',
+                        duration: 2000,
+                        location: 'bottom'
+                    });
+
+                }
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+
+    }
+    // 跳转到改动余额的页面
+    function goToAdd () {
+      // 获取khId
+    var khId = $('.khId').val();
+    console.log(JSON.stringify);
+    api.openFrame({
+        name: 'khyue_update_btn',
+        url: './khyue_update_btn.html',
+        rect: {
+            x: 0,
+            y: 320,
+            w: 'auto',
+            h: 'auto'
+        },
+        pageParam: {
+            khId:khId
+        },
+        bounces: true,
+        bgColor: 'rgba(0,0,0,0)',
+        vScrollBarEnabled: true,
+        hScrollBarEnabled: true
+    });
+    }
+
+    // 添加取消按钮功能
+    function cancelInput() {
+      $('.khName').val('');
+      $('.khId').val('');
+      $('.goAddress').val('');
+      $('.khYue').val('');
+      $('.khJingli').val('');
+      $('.khBz').val('');
+      api.cancelAjax({
+          tag: 'kh'
+      });
+
+    }
+</script>
+
+</html>

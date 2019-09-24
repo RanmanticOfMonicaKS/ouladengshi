@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link rel="stylesheet" type="text/css" href="../css/api.css" />
+	<link rel="stylesheet" href="../css/style.css">
+	<link rel="stylesheet" type="text/css" href="../css/aui.2.0.css" />
+	<link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css" />
+	<title>Document</title>
+	<style>
+		body {
+			background-color: #dfc7af;
+		}
+
+		.aui-list .aui-list-header {
+			background-color: #59493f;
+			color: #dfc7af;
+		}
+
+		.aui-list .aui-list-item {
+			background-color: #dfc7af;
+			border-bottom: 1px solid #ccc;
+		}
+
+		.aui-list .aui-list-item div {
+			color: #59493f;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="wrap">
+		<div class="aui-content aui-margin-b-15">
+			<ul class="aui-list aui-form-list">
+				<li class="aui-list-header">输入订单信息</li>
+				<li class="aui-list-item">
+					<div class="aui-list-item-inner">
+						<div class="aui-list-item-label">
+							品牌名称：
+						</div>
+						<div class="aui-list-item-input">
+							<input type="text" placeholder="请输入品牌名称 (如 '光之梦')" autofocus class="ppName">
+						</div>
+					</div>
+				</li>
+				<li class="aui-list-item">
+					<div class="aui-list-item-inner">
+						<div class="aui-list-item-label">
+							订单号：
+						</div>
+						<div class="aui-list-item-input">
+							<input type="number" placeholder="已存在订单，请点击右上角'更新运输信息'" class="ddId">
+						</div>
+					</div>
+				</li>
+				<li class="aui-list-item">
+					<div class="aui-list-item-inner">
+						<div class="aui-list-item-label">
+							数量(件)：
+						</div>
+						<div class="aui-list-item-input">
+							<input type="number" placeholder="数量" class="ddNum">
+						</div>
+					</div>
+				</li>
+
+				<li class="aui-list-item">
+					<div class="aui-list-item-inner">
+						<div class="aui-list-item-label">
+							运输起点：
+						</div>
+						<div class="aui-list-item-input">
+							<select class="startAddress">
+								<option>欧拉灯饰武昌分部</option>
+								<option>欧拉灯饰汉口分部</option>
+								<option>欧拉灯饰汉阳分部</option>
+							</select>
+						</div>
+					</div>
+				</li>
+				<li class="aui-list-item">
+					<div class="aui-list-item-inner">
+						<div class="aui-list-item-label">
+							运输终点：
+						</div>
+						<div class="aui-list-item-input">
+							<input type="text" placeholder="请输入目的地" class="goAddress">
+						</div>
+					</div>
+				</li>
+
+				<li class="aui-list-item">
+					<div class="aui-list-item-inner">
+						<div class="aui-list-item-label last">
+							备注：
+						</div>
+						<div class="aui-list-item-input">
+							<textarea placeholder="添加'备注" class="bzInfo"></textarea>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<!-- <script type="text/javascript" src="../plugins/doT.min.js"></script> -->
+<script type="text/javascript" src="../plugins/jquery/jquery-1.9.1.min.js"></script>
+<script src="../plugins/aui/aui-tab.js"></script>
+<!-- <script type="text/javascript" src="../plugins/weui/js/jquery-weui.min.js"></script> -->
+<script src="../plugins/labelauty/js/jquery-labelauty.js"></script>
+<script type="text/javascript" src="../script/common.js"></script>
+<script type="text/javascript" src="../script/json.js"></script>
+<script>
+	var $ppNames = ['光之梦', '天之痕', '海之蓝', '水之皓'];
+	// 1 外部获取所有填入的值
+	// 外部点击确认按钮，这边再手机数据进行验证，所以在外部发送按钮事件
+	// 1.1 品牌名称
+	// 监听父frame发送过来的点击事件，点击开始收集数据进行验证
+	var dataH = {
+	
+	};
+	apiready = function () {
+		api.addEventListener({
+			name: 'buttonClicked'
+		}, function (ret, err) {
+			// console.log('监听到btn' + JSON.stringify(ret));
+			dataH.ppName = $api.val($api.dom('.ppName')).trim();
+			dataH.ddId = $api.val($api.dom('.ddId')).trim();
+			dataH.ddNum = $api.val($api.dom('.ddNum')).trim();
+			dataH.startAddress = $api.val($api.dom('.startAddress')).trim();
+			dataH.goAddress = $api.val($api.dom('.goAddress')).trim();
+			dataH.bzInfo = $api.val($api.dom('.bzInfo')).trim();
+			// 1.2 订单编号
+			if (ret.value.type == '1') {
+				if (!dataH.ppName || !$ppNames.includes(dataH.ppName)) {
+					api.toast({
+						msg: '请输入正确的品牌名称',
+						duration: 1000,
+						location: 'bottom'
+					});
+					return;
+				}
+
+				if (!dataH.ddId) {
+					api.toast({
+						msg: '订单号不能为空',
+						duration: 1000,
+						location: 'bottom'
+					});
+					return;
+				}
+				if (!dataH.ddNum) {
+					api.toast({
+						msg: '数量不能为空',
+						duration: 1000,
+						location: 'bottom'
+					});
+					return;
+				}
+				if (!dataH.goAddress) {
+					api.toast({
+						msg: '请输入目的地',
+						duration: 1000,
+						location: 'bottom'
+					});
+					return;
+				}
+
+				api.showProgress({
+					title: ' 正在查询',
+					text: ' 请稍后',
+					modal: true
+				});
+				// 查询后台，看订单号是否已存在，提示用户，可以点击更新部分
+				console.log('准备发送ajax' + dataH.ddId);
+
+				api.ajax({
+					url: apiAddress + 'api.do',
+					method: 'post',
+					timeout: 30,
+					dataType: 'json',
+					returnAll: false,
+					data: {
+						body: {
+							gb_name: 'queryBiz.list#ks_getYsInfo_byCondition',
+							param_info: {
+								ddId: dataH.ddId,
+							}
+						}
+					}
+				}, function (ret, err) {
+					console.log('进入ajx回调');
+
+					if (ret) {
+						// 清除进度展示
+						// dataH = ret.param_info.records[0]
+						console.log(JSON.stringify(ret));
+						api.hideProgress();
+						// 先取消事件监听
+						if (ret.param_info.count > 0) {
+							// 如果已存在，给用户提示是否调到，更新界面
+							api.confirm({
+								title: '订单号已经存在',
+								msg: '  确认：进行更新当前运输位置。\n  取消：重新输入订单号。',
+								buttons: ['确认', '取消']
+							}, function (ret, err) {
+								//回复监听
+
+								if (ret.buttonIndex == 1) {
+									// 坑1 --真他吗坑，我bring你妹啊，坑我一天擦，老子反向监听一波
+									// 坑2 --如果这里没有先在update页面进行监听的话，是监听不到的，有顺序关系
+									api.sendEvent({
+										name: 'toUpdate',
+										extra: {
+											dataH
+										}
+									});
+									/* api.bringFrameToFront({
+										from:'sy_ys_update',
+										to:'sy_ys_input'
+									}); */
+								}
+								if (ret.buttonIndex == 2) {
+									// 订单号，自动聚焦，提醒用户修改
+									$api.dom('.ddId').focus();
+								}
+							});
+						} else {
+							console.log('执行增加操作');
+
+							api.ajax({
+								url: apiAddress + 'gb/save.do',
+								method: 'post',
+								headers: {
+									'Content-type': 'application/json;charset=utf-8'
+								},
+								timeout: 30,
+								dataType: 'json',
+								returnAll: false,
+								data: {
+									body: {
+										tbname: 'ys_info',
+										ppName: dataH.ppName,
+										ddId: dataH.ddId,
+										ddNum: dataH.ddNum,
+										startAddress: dataH.startAddress,
+										goAddress: dataH.goAddress,
+										bzInfo: dataH.bzInfo
+									}
+								}
+							}, function (ret, err) {
+								if (ret) {
+									console.log('进入新增回调');
+									if (ret.status == 1) {
+
+										api.toast({
+											msg: JSON.stringify(ret),
+											duration: 2000,
+											location: 'bottom'
+										});
+									}
+								} else {
+									api.alert({
+										msg: ('错误码：' + err.code + '；错误信息：' + err.msg +
+											'网络状态码：' + err.statusCode)
+									});
+								};
+							});
+						}
+
+						// TODO 
+					} else {
+						api.alert({
+							msg: ('错误码：' + err.code + '；错误信息：' + err.msg + '网络状态码：' + err
+								.statusCode)
+						});
+					};
+				});
+			}
+		})
+	}
+</script>
+
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport"
+		content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+	<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+	<title>录入运输信息</title>
+	<link rel="stylesheet" type="text/css" href="../css/api.css" />
+	<link rel="stylesheet" href="../css/style.css">
+	<!-- <link rel="stylesheet" type="text/css" href="../plugins/weui/lib/weui.min.css"/> -->
+	<!-- <link rel="stylesheet" type="text/css" href="../plugins/weui/css/jquery-weui.min.css"/> -->
+	<link rel="stylesheet" type="text/css" href="../css/aui.2.0.css" />
+	<!-- <link rel="stylesheet" href="../css/aui.css"> -->
+	<link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css" />
+	<link rel="stylesheet" href="../plugins/labelauty/css/jquery-labelauty.css">
+	<style>
+		#wrap {
+			position: relative;
+			box-sizing: border-box;
+		}
+
+		.aui-tab-item {
+			color: #59493f;
+			background-color: #dfc7af;
+		}
+
+		.aui-bar-btn-item.aui-active {
+			background-color: #59493f;
+		}
+
+		.aui-bar-btn-item {
+			height: 50px;
+			font-size: 18px;
+			font-weight: 700;
+			border: 1px solid #59493f;
+			background-color: #dfc7af;
+		}
+
+		/* 这里需要把按钮定在底部 */
+	</style>
+</head>
+
+<body>
+	<div id="wrap" class="flex-wrap flex-vertical">
+		<div class="header">
+			<!-- 这里b元素不能够居中的原因，跟网页的的差别，在于fixStatusBar给header添加了内边距吧 -->
+			<i tapmode onclick="api.closeWin();" class="fa fa-arrow-left"></i>
+			<div class="title">
+				录入运输信息
+			</div>
+		</div>
+		<div id="main" class="flex-con">
+			<!-- 顶部切换栏 -->
+			<div class="aui-tab" id="tab">
+				<div class="aui-tab-item aui-active" data-order="1">录入运输信息</div>
+				<div class="aui-tab-item" data-order="2">
+					更新运输信息
+				</div>
+			</div>
+		</div>
+		<!-- 底部确认取消按钮 -->
+		<div class="aui-bar aui-bar-btn" style="width:100%;">
+			<div class="aui-bar-btn-item aui-active" onclick="buttonClicked()">确认</div>
+			<div class="aui-bar-btn-item">取消</div>
+		</div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<!-- <script type="text/javascript" src="../plugins/doT.min.js"></script> -->
+<script type="text/javascript" src="../plugins/jquery/jquery-1.9.1.min.js"></script>
+<script src="../plugins/aui/aui-tab.js"></script>
+<!-- <script type="text/javascript" src="../plugins/weui/js/jquery-weui.min.js"></script> -->
+<script src="../plugins/labelauty/js/jquery-labelauty.js"></script>
+<script type="text/javascript" src="../script/common.js"></script>
+<script type="text/javascript" src="../script/cg_cz_edit.js"></script>
+<script>
+	var headerH = $api.offset($api.dom('.header')).h;
+	var tabListH = $api.offset($api.dom('.aui-tab')).h
+	var auiBarH = $api.offset($api.dom('.aui-bar')).h
+	var frames = [];
+	// 尼玛这aui是真坑啊，天 ，文档太不全了，启用tab栏需要进行了初始化
+	var flag = [0, 0];
+	var tabFrames = ['sy_ys_input', 'sy_ys_update']
+	// 将要发送请求的数据
+	var data = {};
+	// 初始事件类型为录入
+
+	apiready = function () {
+		$api.fixStatusBar( $api.dom('.header') );
+
+		// 一下代码提高带有tapmode属性的元素的点击体验
+		api.parseTapmode();
+
+		changeTabFrame(0);
+		// 1.0 auitab栏实例对象 ，监听子frame中传递过来的的事件，和参数，听过查询参数的订单号，
+		var tab = new auiTab({
+			element: document.getElementById("tab"),
+			// callback:function(o,dom){
+			//     console.log(o);
+			// }
+		}, function (ret) {
+
+			// 回到中能够看到，当前页面的编号。
+			// 在编辑页面设置事件，点击底部按钮时，给子编辑页面进行触发
+			changeTabFrame(ret.index - 1);
+		});
+
+		// 这里直接打开两个页面，避免后面再进行判断，方便很多，！！！！ 
+		// ⭐⭐这里是个非常大的坑啊，看上去非常美好，但是实际上是个非常大的坑，第二次打开frame会应项第一个frame的渲染
+		// 倒是第二个frame的页面没有渲染出来。就被定调了。非常重要！！！如果需要一次打开多个页面，利于后面的优化，用
+		// openFrameGroup
+		// 3.0 切换tab栏
+
+		// 发送事件，点击按钮
+		// 根据type类型收集数据，决定发送ajax请求的接口
+		// 4.0 监听到切换时间就特么切换
+		api.addEventListener({
+			name: 'toUpdate'
+		}, function (ret, err) {
+			console.log(JSON.stringify(ret));
+
+			// 传过来的$ddId可以实现传递到更新页面，直接显示在订单号部分，更加人性化
+			changeTabFrame(1, ret.value.dataH.ddId);
+		});
+
+	}
+
+	function buttonClicked() {
+		var type = $('.aui-tab-item.aui-active').data('order');
+		console.log(JSON.stringify(type));
+		
+		api.sendEvent({
+			name: 'buttonClicked',
+			extra: {
+				type
+				// headerH:headerH,
+				// tabListH:tabListH,
+				// auiBarH:auiBarH
+			}
+			// 查看当前的frame就行了
+		});
+
+	}
+
+	function changeTabFrame(index, ddId) {
+
+		console.log(ddId);
+
+		frames = api.frames();
+		// 这里就不搞什么 传递了，直接同一传递参数
+		// 如果页面已经打开。则，把页面bring到前面，如果没有打开，则打开页面
+		// alert('打开页面'+index);
+		// 将已经打开的信息存入到本地中 关闭时设置为0  以下方法太过负责，直接用flag方法判断只能在本页。
+		// 但是后面的子页面我只有两个，我一次性打开完事儿 下面代码，注释了
+		// $api.setStorage(tabFrames[index], '1');
+		// console.log( JSON.stringify(frames) );
+		var arr = frames.filter(item => item.name == tabFrames[index]);
+		if (arr.length) {
+			console.log('移入');
+			// 如果是走这里，事件监听是可以监听到的 
+			api.bringFrameToFront({
+				from: tabFrames[index],
+			});
+
+		} else {
+			console.log('创建');
+			//走创建这一步，是无法进行监听的，和代码指定执行传递传输参数的，那我能不能直接指定代码执行性？？？？so？？？
+			api.openFrame({
+				name: tabFrames[index],
+				url: tabFrames[index] + '.html',
+				bounces: true,
+				rect: {
+					x: 0,
+					y: headerH + tabListH,
+					w: 'auto',
+					h: api.frameHeight - tabListH - headerH - auiBarH
+				},
+				bgColor: '#dfc7af',
+				reloud: true
+			});
+
+		}
+		$('.aui-tab-item').removeClass('aui-active').eq(index).addClass('aui-active');
+		// 添加监听update页面加载完毕的监听
+		api.addEventListener({
+			name: 'loaded'
+		}, function (ret, err) {
+			console.log('监听到loaded');
+
+			var jsfun = `autoFocus(${index},${ddId})`;
+			api.execScript({
+				frameName: 'sy_ys_update',
+				script: jsfun
+			});
+
+		});
+
+	}
+</script>
+
+</html>

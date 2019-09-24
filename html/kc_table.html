@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport"
+		content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+	<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+	<title>订单状态</title>
+	<link rel="stylesheet" type="text/css" href="../css/api.css" />
+	<link rel="stylesheet" type="text/css" href="../css/style.css" />
+	<link rel="stylesheet" href="../css/aui.2.0.css">
+	<link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css" />
+	<style>
+	 #wrap {
+	 		height:100%;
+			background-color: #59493f;
+			background: url('../image/bg3.jpg') no-repeat;
+			background-size: cover;
+	 }
+		#main {
+			height:50%;
+			color: #252525;
+      background-color: #59493f;
+		}
+		.ys-info-item {
+			background-color: #dfc7af;
+			margin-bottom: 10px;
+			border-radius: 10px;
+			padding: 5px;
+			box-shadow:-3px 3px 0px lightyellow;
+		}
+
+		.ys-ret {
+			padding-left: 10px;
+			background-color: gold;
+			margin-bottom: 10px;
+			border-radius: 5px;
+			box-shadow:-1px 1px 0px lightyellow;
+		}
+		.aui-col-xs-6 {
+			background-color: #dfc7af;
+
+		}
+		.aui-row-padded [class*=aui-col-xs-] {
+			padding: 5px 0px 5px 10px;
+			color:#252525;
+		}
+		.aui-col-xs-6 i {
+			font-style: normal;
+			color:chocolate;
+		}
+		.tempList {
+			padding: 20px 10px 0px 10px;
+		}
+
+
+	</style>
+</head>
+
+<body>
+	<div id="wrap">
+		<div class="header">
+			<i  onclick="closeWin();" class="fa fa-arrow-left"></i>
+			<div class="title">
+				库存状态
+			</div>
+		</div>
+		<div id="main">
+
+		</div>
+		<div class="tempList">
+
+		</div>
+	</div>
+	<script type="text/template" id="tempList">
+		<ul>
+		{{~it.data:value:index }}
+			<li class="ys-info-item  aui-row-padded clearfix">
+				<span class="aui-col-xs-6">品牌名称：<i>{{= value.ppname }}</i></span>
+				<span class="aui-col-xs-6">品牌单价：<i>{{= value.ppprice }}</i> </span>
+				<span class="aui-col-xs-6">品牌库存：<i>{{= value.ppkucun }}</i> </span>
+				<span class="aui-col-xs-6">品牌编号：<i>{{= value.ppid }}</i> </span>
+			</li>
+			{{~ }}
+
+		</ul>
+	</script>
+
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../plugins/jquery/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="../script/common.js"></script>
+<script src="../plugins/echarts.min.js" charset="utf-8"></script>
+<script src="../plugins/vintage.js" charset="utf-8"></script>
+<script src="../plugins/doT.min.js" charset="utf-8"></script>
+<script>
+  var myChart = echarts.init(document.getElementById('main'),'vintage');
+  option = {
+      title: {
+          text: '商品库存图',
+          subtext: '请及时补充货源  '
+      },
+      tooltip: {
+          trigger: 'item',
+          formatter: "{a} <br/>{b} : {c}"
+      },
+      toolbox: {
+          feature: {
+              dataView: {readOnly: false},
+              restore: {},
+              saveAsImage: {}
+          }
+      },
+      legend: {
+          show:true,
+          data: ['光之梦','天之痕','','水之皓','海之蓝']
+      },
+      calculable: true,
+      series: [
+          {
+              name:'漏斗图',
+              type:'funnel',
+              left: '10%',
+              top: 70,
+              //x2: 80,
+              bottom: 60,
+              width: '80%',
+              // height: {totalHeight} - y - y2,
+              min: 0,
+              max: 3500,
+              minSize: '0%',
+              maxSize: '100%',
+              sort: 'descending',
+              gap: 2,
+              label: {
+                  show: true,
+                  position: 'inside'
+              },
+              labelLine: {
+                  length: 10,
+                  lineStyle: {
+                      width: 1,
+                      type: 'solid'
+                  }
+              },
+              itemStyle: {
+                  borderColor: '#fff',
+                  borderWidth: 1
+              },
+              emphasis: {
+                  label: {
+                      fontSize: 20
+                  }
+              },
+              data: [
+                  {value: 2000, name: '光之梦'},
+                  {value: 1400, name: '天之痕'},
+                  {value: 500, name: '水之皓'},
+                  {value: 1500, name: '海之蓝'}
+              ]
+          }
+      ]
+  };
+
+myChart.setOption(option);
+// 添加事件
+myChart.on('click',function(params) {
+		  //  alert("单击了"+params.componentType+"x轴标签"+params.value+';'+params.name);
+		var ppName = params.name;
+		// 发送ajax得到数据
+		api.ajax({
+		    url: apiAddress+'api.do',
+		    method: 'post',
+		    data: {
+					body:{
+						gb_name: 'queryBiz.list#ks_getPPInfo_byCondition',
+						param_info: {
+                ppName
+						}
+
+					}
+		    }
+		},function(ret, err){
+		    if (ret) {
+					console.log(JSON.stringify(ret));
+						tempData = {
+								data: ret.param_info.records
+						};
+						var tmpText = doT.template($('#tempList').text());
+						$('.tempList').html(tmpText(tempData));
+		    } else {
+		        alert( JSON.stringify( err ) );
+		    }
+		});
+
+})
+</script>
+
+</html>

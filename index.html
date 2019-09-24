@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport"
+		content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+	<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+	<title>欧拉灯饰</title>
+</head>
+
+<body></body>
+<script type="text/javascript" src="./script/api.js"></script>
+<script type="text/javascript" src="./plugins/jquery/jquery-1.9.1.min.js"></script>
+<!-- <script type="text/javascript" src="./script/common.js"></script> -->
+<script type="text/javascript">
+	var userInfo = JSON.parse($api.getStorage('userInfo') || '{}');
+	apiready = function () {
+		api.setStatusBarStyle({
+			style: 'light',
+			color:'#59493f'
+		});
+		//如果没有登录时候处理
+
+		if (userInfo.userName) {
+
+			toMain()
+			backEventListenner();
+
+		} else {
+			// 没有登录跳转到login页面
+			api.openFrame({
+				name: 'login',
+				url: 'html/login.html',
+				bounces: false,
+				rect: {
+					x: 0,
+					y: 0,
+					w: 'auto',
+					h: 'auto'
+				}
+			});
+
+		}
+
+	}
+
+	function toMain() {
+		//首页初始化页面，每次进入就进行云修复生效，以便后面的页面数据得以更新
+		api.addEventListener({
+			name: 'smartupdatefinish'
+		}, function (ret, err) {
+			api.rebootApp();
+		});
+		api.openFrame({
+			name: 'main',
+			url: 'html/main.html',
+			bgColor:'#dfc7af',
+		});
+	}
+
+	var flag = false;
+	// 首页进行判断处理，提示滑动两次会退出应用
+	function backEventListenner() {
+		api.addEventListener({
+			name: 'keyback'
+		}, function (ret, err) {
+			if (!flag) {
+				api.toast({
+					msg: '再按一次返回键退出' + api.appName,
+					duration: 2000,
+					location: 'bottom'
+				});
+			}
+			setTimeout(function () {
+				flag = false;
+			}, 3000);
+			if (flag) {
+				flag = false;
+				api.closeWidget({
+					silent: true
+				});
+			}
+			flag = true;
+		});
+	}
+</script>
+
+</html>

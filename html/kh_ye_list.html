@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+	<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+	<title>预付款查询</title>
+	<link rel="stylesheet" type="text/css" href="../css/api.css" />
+	<link rel="stylesheet" type="text/css" href="../css/style.css" />
+	<link rel="stylesheet" href="../css/aui.2.0.css">
+	<link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css" />
+	<style>
+		#wrap {
+			position: relative;
+			box-sizing: border-box;
+			background: #f0f2f5;
+			background: url('../image/bg2.jpg');
+
+		}
+
+		#main {
+			color: #252525;
+		}
+
+		html,
+		body {
+			background-color: #fff;
+		}
+
+		.content {
+			position: fixed;
+			top: 50px;
+			z-index: 99;
+			height: 120px;
+			width: 100%;
+			background-color: transparent;
+			border-radius: 10px;
+			/* background-color: #dfc7af;	 */
+		}
+
+		.search {
+			margin-top: 10px;
+			background-color: #dfc7af;
+			letter-spacing: 0.5em;
+			font-size: 25px;
+			color:#59493f;
+			box-shadow:-3px 3px 0px lightyellow;
+			border-radius: 10px;
+		}
+
+		.ys-info-item {
+			background-color: #dfc7af;
+			margin-bottom: 10px;
+			border-radius: 10px;
+			padding: 5px;
+			box-shadow:-3px 3px 0px lightyellow;
+		}
+
+		.ys-ret {
+			padding-left: 10px;
+			background-color: gold;
+			margin-bottom: 10px;
+			border-radius: 5px;
+			box-shadow:-1px 1px 0px lightyellow;
+		}
+		.aui-col-xs-6 {
+			background-color: #dfc7af;
+
+		}
+		.aui-row-padded [class*=aui-col-xs-] {
+			padding: 5px 0px 5px 10px;
+			color:#252525;
+		}
+		.aui-col-xs-6 i {
+			font-style: normal;
+			color:chocolate;
+		}
+		.tempList {
+			padding: 155px 10px 0px 10px;
+		}
+
+
+	</style>
+</head>
+
+<body>
+	<div id="wrap" class="flex-wrap flex-vertical">
+		<div class="header">
+			<!-- 这里b元素不能够居中的原因，跟网页的的差别，在于fixStatusBar给header添加了内边距吧 -->
+			<i tapmode onclick="api.historyBack() || api.closeWin();" class="fa fa-arrow-left"></i>
+			<div class="title">
+				客户余额
+			</div>
+		</div>
+		<div id="main">
+			<div class="content query">
+				<ul class="aui-list aui-form-list">
+					<li id='searchInfo' class="aui-list-item">
+						<div class="aui-list-item-inner">
+							<div class="aui-list-item-label-icon">
+								<i class="fa fa-search	"></i>
+							</div>
+							<div class="aui-list-item-input">
+							</div>
+							<div tapmode class="aui-list-item-label-icon" onclick="fnclear()">
+								<i class="fa fa-times-circle"></i>
+							</div>
+						</div>
+					</li>
+				</ul>
+				<div tapmode class="aui-btn aui-btn-block  search" onclick="fnsearch(0)">查询</div>
+
+			</div>
+			<div class="tempList">
+			</div>
+
+		</div>
+		<script id="tempList" type="text/x-dot-template">
+			<div class="ys-ret">搜索结果如下：</div>
+			<ul>
+			{{~ it.data:value:index}}
+				<li class="ys-info-item  aui-row-padded clearfix">
+					<span class="aui-col-xs-6">客户名称：<i>{{=value.khname}}</i></span>
+					<span class="aui-col-xs-6">客户编号：<i>{{=value.khid}}</i></span>
+					<span class="aui-col-xs-6">客户余额：<i>{{=value.khyue }}</i> </span>
+					<span class="aui-col-xs-6">客户地址：<i>{{=value.khaddress }}</i> </span>
+				</li>
+				{{~ }}
+			</ul>
+		</script>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../plugins/doT.min.js"></script>
+<script type="text/javascript" src="../plugins/jquery/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="../script/common.js"></script>
+<script type="text/javascript" src="../script/kh_ye_list.js"></script>
+
+</html>

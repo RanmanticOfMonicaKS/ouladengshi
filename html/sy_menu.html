@@ -1,0 +1,347 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport"
+		content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+	<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+	<title>menu_frame</title>
+	<link rel="stylesheet" type="text/css" href="../css/api.css" />
+	<link rel="stylesheet" type="text/css" href="../css/style.css" />
+	<link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css" />
+	<link rel="stylesheet" href="../plugins/swiper/swiper.min.css">
+	<link rel="stylesheet" href="../css/aui.2.0.css">
+	<style>
+		#wrap {
+
+			margin: 0;
+			padding: 0;
+			/* background-color: fff; */
+			padding-right: -15px;
+			box-sizing: border-box;
+		}
+
+		body {
+			/* height: 1000px; */
+			background-color: #0e0e0e;
+		}
+
+		main {
+			padding: 20px 10px 0px 10px;
+			background-color: #0e0e0e;
+			box-sizing: border-box;
+		}
+
+		/* 头部样式结束 */
+		.swiper-container {
+			/* margin: 20px 0; */
+			margin-bottom: 20px;
+			/* box-sizing: border-box; */
+			box-shadow: -1px -1px 1px #dfc7af, 1px 1px 1px #dfc7af;
+		}
+
+		.swiper-slide {
+			width: 100%;
+			height: 100%;
+			/* border-radius: 20px; */
+			/* overflow: hidden; */
+		}
+
+		.swiper-slide img {
+			width: 100%;
+			height: 100%;
+		}
+
+		/* 轮播图部分结束 */
+		.aui-grid {
+			width: 100%;
+			/* background-color: #eee; */
+			padding: 10px;
+			box-sizing: border-box;
+			/* border: 1px solid #ccc; */
+			border-radius: 20px;
+			box-shadow: -5px -5px #59493f;
+			background-color: #dfc7af;
+			border: 1px solid #59493f;
+		}
+
+		.aui-row {
+			width: 100%;
+		}
+
+		.aui-col-xs-4 {
+			background-color: #dfc7af;
+			/* margin: 5px; */
+			flex-wrap: nowrap;
+			/* justify-content: space-between; */
+			border: 1px solid #59493f;
+			box-sizing: content-box;
+			margin: 4px;
+			border-radius: 10px;
+			width: 30%;
+			box-shadow: -2px -2px 0px #fff;
+		}
+
+		.aui-col-xs-4 i {
+			font-size: 24px;
+		}
+
+		/* 九宫格部分之花里胡哨 */
+
+		.scroll-box {
+			position: relative;
+			width: 100%;
+			height: 40px;
+			/* border: 2px solid #000; */
+			margin: 20px auto 0px;
+			overflow: hidden;
+			vertical-align: middle;
+			border-radius: 5px;
+			color: #59493f;
+			background-color: #dfc7af;
+		}
+
+		.scroll-box ul {
+			position: absolute;
+			left: 0;
+			top: 0;
+			list-style: none;
+			width: 100%;
+		}
+
+		.scroll-box span {
+			position: absolute;
+			font-size: 16px;
+			top: 30%;
+			left: 10px;
+			z-index: 999;
+		}
+
+		.scroll-box ul li {
+			width: 100%;
+			height: 40px;
+			box-sizing: border-box;
+			line-height: 40px;
+			padding-left: 50px;
+			/* background-color: #59493f; */
+			font-size: 16px;
+			box-sizing: border-box;
+		}
+
+		/* 消息广播样式结束 */
+
+		.handler {
+			width: 100%;
+			height: 50px;
+		}
+
+		.handler span {
+			display: block;
+			height: 50px;
+			width: 50px;
+			background-size: 50px 50px;
+		}
+
+		.handler_light {
+			background: url('../image/dark.png') no-repeat;
+		}
+
+		.handler_dark {
+			background: url('../image/light.png') no-repeat;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="wrap">
+		<!-- 头部 -->
+		<div class="header">
+			<div class="title">
+				首页
+			</div>
+		</div>
+		<main>
+			<!-- 轮播图 -->
+			<div class="swiper-container swiper-container-horizontal"
+				style="transform:translate3d(0,0,0);overflow: hidden;">
+				<div class="swiper-wrapper">
+					<div class="swiper-slide blue-slide">
+						<img src="../image/banner_01.png" alt="" style="transform:translate3d(0,0,0);">
+					</div>
+					<div class="swiper-slide red-slide ">
+						<img src="../image/banner_02.png" alt="">
+					</div>
+					<div class="swiper-slide orange-slide ">
+						<img src="../image/banner_03.png" alt="">
+					</div>
+				</div>
+
+			</div>
+			<!-- 九宫格 -->
+			<section class="aui-grid ">
+				<ul class="aui-row">
+					<!-- 这里不能简单的写方法，放在行内式，这里行内式是得不到数据，跳转的永远是一个页面 -->
+					<li class="aui-col-xs-4 detail " data-url="sy_ys_edit.html">
+						<i class="fa fa-truck"></i>
+						<div class="aui-grid-label">录入运输信息</div>
+					</li>
+					<li class="aui-col-xs-4 detail " data-url="sy_ys_info.html">
+						<i class="fa fa-search"></i>
+						<div class="aui-grid-label">查询运输信息</div>
+					</li>
+					<li class="aui-col-xs-4 detail " data-url="sy_kh_info.html">
+						<i class="fa fa-address-card-o"></i>
+						<div class="aui-grid-label">客户信息</div>
+					</li>
+					<li class="aui-col-xs-4 detail " data-url="sy_menu_price.html">
+						<i class="fa fa-area-chart"></i>
+						<div class="aui-grid-label">价格表</div>
+					</li>
+					<li class="aui-col-xs-4 detail " data-url="kh_ye_list.html">
+						<i class="fa fa-credit-card"></i>
+						<div class="aui-grid-label">客户余额</div>
+					</li>
+					<li class="aui-col-xs-4 detail " data-url="input_list.html">
+
+						<i class="fa fa-pencil-square-o"></i>
+						<div class="aui-grid-label">录入订单</div>
+					</li>
+
+					<li class="aui-col-xs-4 detail " data-url="list_status.html">
+
+						<i class="fa fa-file-o"></i>
+						<div class="aui-grid-label">订单状态</div>
+
+					</li>
+					<li class="aui-col-xs-4 detail " data-url="kc_table.html">
+
+						<i class="fa fa-cubes"></i>
+						<div class="aui-grid-label">库存</div>
+					</li>
+					<li class="aui-col-xs-4 detail" data-url="yy_plan_exlist.html">
+						<i class="fa fa-phone"></i>
+						<div class="aui-grid-label">预订</div>
+					</li>
+				</ul>
+			</section>
+			<!-- 消息轮播 -->
+			<section class="scroll-box">
+				<!-- 对消息轮播进行优化滚动ul，现实单行消息 -->
+				<span class="fa fa-volume-up"></span>
+				<ul>
+					<li>南湖大道居然之家复古圆灯店订单完成</li>
+					<li>东湖家具城订单完成</li>
+					<li>汉口解放大道订单完成</li>
+				</ul>
+			</section>
+			<!-- 开光等控件 -->
+			<section class="handler">
+				<span class="handler_light pull-right"></span>
+			</section>
+		</main>
+	</div>
+</body>
+
+<script type="text/javascript" src="../script/api.js"></script>
+<!-- <script type="text/javascript" src="../plugins/doT.min.js"></script> -->
+<script type="text/javascript" src="../plugins/jquery/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="../script/common.js"></script>
+<script src="../plugins/swiper/swiper.min.js"></script>
+<script type="text/javascript" src="../plugins/layer/layer.js"></script>
+<script id="frame_menu" type="text/javascript" src="../script/sy_menu.js" data="1"></script>
+<script language="javascript">
+	apiready = function () {
+		var header = document.querySelector('.header');
+		$api.fixStatusBar(header);
+	}
+
+	var mySwiper = new Swiper('.swiper-container', {
+		loop: true,
+		autoplay: 2000,
+		autoplayDisableOnInteraction: false
+	})
+	// 消息广播js代码
+	$(function () {
+		//获得当前<ul>
+		var $uList = $(".scroll-box ul");
+		var timer = null;
+		//触摸清空定时器
+		$uList.hover(function () {
+				clearInterval(timer);
+			},
+			function () { //离开启动定时器
+				timer = setInterval(function () {
+						scrollList($uList);
+					},
+					100);
+			}).trigger("mouseleave"); //自动触发触摸事件
+		//滚动动画
+		function scrollList(obj) {
+			//获得当前<li>的高度
+			var scrollHeight = document.querySelector('.scroll-box li').offsetHeight;
+			var ulH = $uList.height();
+			/* 			api.toast({
+							msg:'ul的高度：'+ulH+'步长：'+scrollHeight
+
+						}) */
+			//滚动出一个<li>的高度
+			$uList.animate({
+					top: -scrollHeight
+				},
+				3000,
+				// 这相当巧妙的利用了animate函数的回调函数，对移动的状态进行了归原处理，
+				// 巧妙的，在没有设定定时器的情况下，进行了循环的动画效果！
+				function () {
+					// 当移动了一个ul的高度，恢复ul到初始位置
+
+					$uList.css({
+						"top": 0
+						//这里		
+					}).find('li:first').appendTo($uList);
+				})
+
+		}
+		// 实现开关灯功能 
+		var $handler = $('.handler>span');
+		var flag = false;
+		$handler.on('click', function () {
+			if (!flag) {
+				$('main').css({
+					"backgroundColor": "#dfc7af"
+				});
+				$('.aui-col-xs-4').css({
+					"backgroundColor": "#dfc7af",
+					"color": "#59493f"
+				})
+				$(this).css({
+					"backgroundImg": "url('../image/light.png')"
+				});
+				$(".scroll-box").css({
+					"backgroundColor": "#59493f",
+					"color": "#dfc7af"
+				})
+				flag = true;
+			} else {
+				$('main').css({
+					"backgroundColor": "#59493f"
+				});
+				$('.aui-col-xs-4').css({
+					"backgroundColor": "#59493f",
+					"color": "#dfc7af"
+				})
+				$(this).css({
+					"backgroundImg": "url('../image/dark.png')"
+				})
+				$(".scroll-box").css({
+					"backgroundColor": "#dfc7af",
+					"color": "#59493f"
+				})
+				flag = false;
+			}
+		})
+
+	});
+</script>
+
+</html>

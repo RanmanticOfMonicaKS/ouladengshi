@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+	<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+	<title>预约订单</title>
+	<link rel="stylesheet" type="text/css" href="../css/api.css" />
+	<link rel="stylesheet" type="text/css" href="../css/style.css" />
+	<link rel="stylesheet" href="../css/aui.2.0.css">
+	<link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css" />
+	<style>
+		#main {
+			background: #dfc7af;
+			color: #252525;
+		}
+
+		body,
+		html {
+			background-color: #dfc7af;
+			height: 100%;
+		}
+		/* mian部分 */
+
+		.aui-list .aui-list-header {
+			background-color: #59493f;
+			color: #dfc7af;
+		}
+
+		.aui-list .aui-list-item {
+			background-color: #dfc7af;
+			border-bottom: 1px solid #ccc;
+		}
+
+		.aui-list .aui-list-item div {
+			color: #59493f;
+		}
+
+		.aui-tab-item {
+			color: #59493f;
+			background-color: #dfc7af;
+		}
+
+		.aui-bar-btn-item.aui-active {
+			background-color: #59493f;
+		}
+
+		.aui-list .aui-list-item.last {
+			border-bottom: 0;
+		}
+
+		.aui-bar-btn-item {
+			width: 50%;
+			height: 50px;
+			font-size: 18px;
+			font-weight: 700;
+			border: 1px solid #59493f;
+			background-color: #dfc7af;
+		}
+
+		.footer {
+			position: fixed;
+			bottom: 0;
+			width: 100%;
+			z-index: 9;
+		}
+
+		.footer .aui-bar-btn {
+			position: relative;
+		}
+	</style>
+</head>
+
+<body tapmode>
+	<div id="wrap">
+		<div class="header">
+			<i onclick="closeWin();" class="fa fa-arrow-left"></i>
+			<div class="title">
+				预约订单
+			</div>
+		</div>
+		<div id="main">
+			<form action="" name="ddInfo" id="ddForm">
+					<div class="aui-content aui-margin-b-15">
+				<ul class="aui-list aui-form-list">
+					<li class="aui-list-header">输入预约订单</li>
+					<li class="aui-list-item">
+						<div class="aui-list-item-inner">
+							<div class="aui-list-item-label">
+								品牌名称：
+							</div>
+							<div class="aui-list-item-input">
+								<input type="text" placeholder="请输入品牌名称 (如 '光之梦')" autofocus name="ppName">
+							</div>
+						</div>
+					</li>
+					<li class="aui-list-item">
+						<div class="aui-list-item-inner">
+							<div class="aui-list-item-label">
+								订单号：
+							</div>
+							<div class="aui-list-item-input">
+								<input type="number" placeholder="请输入预定订单号'" name="ddId">
+							</div>
+						</div>
+					</li>
+					<li class="aui-list-item">
+						<div class="aui-list-item-inner">
+							<div class="aui-list-item-label">
+								数量(件)：
+							</div>
+							<div class="aui-list-item-input">
+								<input type="number" placeholder="数量" name="ddNum">
+							</div>
+						</div>
+					</li>
+					<li class="aui-list-item">
+						<div class="aui-list-item-inner">
+							<div class="aui-list-item-label">
+								运输起点：
+							</div>
+							<div class="aui-list-item-input">
+								<select name="startAddress">
+									<option>欧拉灯饰武昌分部</option>
+									<option>欧拉灯饰汉口分部</option>
+									<option>欧拉灯饰汉阳分部</option>
+								</select>
+							</div>
+						</div>
+					</li>
+					<li class="aui-list-item">
+						<div class="aui-list-item-inner">
+							<div class="aui-list-item-label">
+								预约时间：
+							</div>
+							<div class="aui-list-item-input" onclick="selectTime(); ">
+								<input type="text" placeholder="选择预约时间" disabled="" class="whenToGo" name="whenToGo">
+							</div>
+						</div>
+					</li>
+
+					<li class="aui-list-item">
+						<div class="aui-list-item-inner">
+							<div class="aui-list-item-label">
+								客户名称：
+							</div>
+							<div class="aui-list-item-input">
+								<input type="text" placeholder="请输入客户名称" name="khName">
+							</div>
+						</div>
+					</li>
+					<li class="aui-list-item">
+						<div class="aui-list-item-inner">
+							<div class="aui-list-item-label">
+								客户经理
+							</div>
+							<div class="aui-list-item-input">
+								<input type="text" placeholder="请输入客户经理" name="khJingli">
+							</div>
+						</div>
+					</li>
+
+					<li class="aui-list-item">
+						<div class="aui-list-item-inner">
+							<div class="aui-list-item-label last">
+								备注：
+							</div>
+							<div class="aui-list-item-input">
+								<textarea placeholder="请输入必要的备注信息" name="bzInfo"></textarea>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+			</form>
+		</div>
+		<div class="footer">
+			<!-- 底部确认取消按钮 -->
+			<div class="aui-bar aui-bar-btn" style="width:100%;">
+				<div class="aui-bar-btn-item aui-active" onclick="addDD();">确认</div>
+				<div class="aui-bar-btn-item">取消</div>
+			</div>
+
+		</div>
+
+	</div>
+</body>
+</script>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../plugins/jquery/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="../script/common.js"></script>
+<script type="text/javascript">
+	var whenToGo;
+	var formDate;
+	var UICalendar;
+	var ppNames = ['光之梦', '海之蓝', '天之痕', '水之皓'];
+	apiready = function() {
+		$api.fixStatusBar($api.dom('.header'));
+
+	}
+
+	function addDD() {
+		console.log('666');
+		formDate = $('#ddForm').serializeObject();
+		console.log(JSON.stringify(formDate));
+		// 表单验证
+		if (!formDate.ppName || !ppNames.includes(formDate.ppName)) return alert('请输入正确的品牌名称');
+		if (!formDate.ddId) return alert('请输入客户名称');
+		if (!formDate.ddNum) return alert('请输入客户名称');
+		if (!formDate.khName) return alert('请输入客户名称');
+		if (!formDate.startAddress) return alert('请输入起始地址');
+		if (!formDate.ddJingli) return alert('请输入客户经理');
+		if (!formDate.whenToGo) return alert('请输入预约出发事件')
+		getDdUpdate();
+	}
+	// 判断点击区域，点击不在日历范围，隐藏日历
+	document.addEventListener('touchmove', function(event) {
+
+		event.preventDefault();
+
+	}, false);
+
+	//touchstart事件
+
+	// 移动端记录点击位置的方法，貌似不好用
+	function touchSatrtFunc(evt) {
+
+		try {
+
+			//evt.preventDefault(); //阻止触摸时浏览器的缩放、滚动条滚动等。
+
+			var touch = evt.touches[0]; //获取第一个触点。
+
+			var x = Number(touch.pageX); //页面触点X坐标。
+
+			var y = Number(touch.pageY); //页面触点Y坐标。
+
+			//记录触点初始位置。
+
+			if(x <30 || x >api.frameWidth -30 || y<api.frameHeight / 2 - 130 || y>api.frameHeight / 2 +210) {
+				UICalendar.close();
+			}
+
+			startY = y;
+
+		} catch (e) {
+
+			alert('touchSatrtFunc：' + e.message);
+
+		}
+
+	}
+
+	// 弹出时间选择器
+	function selectTime() {
+		UICalendar = api.require('UICalendar');
+		UICalendar.open({
+			rect: {
+				x: 30,
+				y: api.frameHeight / 2 - 130,
+				w: api.frameWidth - 60,
+				h: 340
+			},
+			styles: {
+				bg: 'rgba(0,0,0,0.5)',
+				week: {
+					weekdayColor: '#fff',
+					weekendColor: '#a8d400',
+					size: 12
+				},
+				date: {
+					color: '#fff',
+					selectedColor: '#3b3b3b',
+					selectedBg: '#a8d500',
+					size: 12
+				},
+				today: {
+					color: 'rgb(230,46,37)',
+					bg: ''
+				},
+				specialDate: {
+					color: '#a8d500',
+					bg: 'widget://image/a.png'
+				}
+			},
+			specialDate: [{
+				date: '2015-06-01'
+			}],
+			switchMode: 'vertical',
+			fixedOn: api.frameName,
+			fixed: false
+		}, function(ret, err) {
+			if (ret) {
+				// alert( JSON.stringify(ret))
+				if (ret.eventType == 'normal') {
+					var y = ret.year;
+					var m = ret.month.length > 1 ? ret.month : '0' + ret.month;
+					var d = (ret.day+'').length > 1 ? ret.day : '0' + ret.day;
+					whenToGo = y + '-' + m + '-' + d;
+					$('.whenToGo').val(whenToGo);
+					UICalendar.close();
+				}
+			} else {
+				alert(JSON.stringify(err));
+			}
+		});
+	}
+
+	function getDdUpdate() {
+		formDate.ddStatus = '预订';
+		api.ajax({
+			url: apiAddress + 'gb/save.do',
+			method: 'post',
+			data: {
+				body: {
+					tbname: 'dd_info',
+					ppName: formDate.ppName,
+					khName: formDate.khName,
+					ddId: formDate.ddId,
+					ddNum: formDate.ddNum,
+					startAddress: formDate.startAddress,
+					whenToGo: formDate.whenToGo,
+					bzInfo: formDate.bzInfo,
+					ddJingli: formDate.ddJingli,
+					ddStatus: formDate.ddStatus
+				}
+			}
+		}, function(ret, err) {
+			if (ret) {
+				if (ret.status == '0') {
+					api.toast({
+						msg: '预订订单已添加',
+						duration: 2000,
+						location: 'bottom'
+					});
+					UICalendar.hide();
+				}
+			} else {
+				alert(JSON.stringify(err));
+			}
+		});
+	}
+</script>
+
+</html>

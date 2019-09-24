@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        html,
+        body {
+            height: 100%;
+            position: relative;
+        }
+
+        .left {
+            position: absolute;
+            left: 20%;
+            top: 50%;
+            width: 100px;
+            height: 100px;
+            background-color: #dfc7af;
+            transform: translate(0, -50%);
+            border-radius: 50%;
+            box-shadow: 0px 0px 15px rgba(0,0,0,.3);
+        }
+
+        .right {
+            position: absolute;
+            right: 20%;
+            top: 50%;
+            width: 100px;
+            height: 100px;
+            background-color: #59493f;
+            transform: translate(0, -50%);
+            border-radius: 50%;
+            box-shadow: 0px 0px 15px rgba(0,0,0,.3);
+        }
+
+        .left input {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 80px;
+            height: 80px;
+            outline: none;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            border:1px solid rbga(0,0,0,.5);
+            background-color: #ccc;
+          }
+        .text {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 20px;
+            color: #dfc7af;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="right" onclick="updateYue();">
+        <div class="text">
+            修改余额
+        </div>
+    </div>
+    <div class="left">
+        <input type="number" name="" value="">
+    </div>
+</body>
+<script src="../script/api.js" charset="utf-8"></script>
+<script src="../plugins/jquery/jquery-1.9.1.min.js" charset="utf-8"></script>
+<script src="../script/common.js" charset="utf-8"></script>
+<script type="text/javascript">
+    var id;
+    var khYue;
+    apiready = function(){
+      id = api.pageParam.id;
+      khName = api.pageParam.khname
+
+      console.log(JSON.stringify(api.pageParam));
+  }
+
+    function  updateYue() {
+      khYue = $('.left>input').val();
+        api.ajax({
+            url: apiAddress+'gb/update.do',
+            method: 'post',
+            data: {
+                body: {
+                  tbname:'kh_info',
+                  id,
+                  khYue
+                }
+            }
+        },function(ret, err){
+            if (ret && ret.status == 1) {
+                alert(khName+'的余额已更改');
+                api.closeFrame({
+                    name: api.frameName
+
+                });
+
+            } else {
+                alert( JSON.stringify( err ) );
+            }
+        });
+    }
+
+</script>
+</html>

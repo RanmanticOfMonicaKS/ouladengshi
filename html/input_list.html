@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport"
+		content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+	<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+	<title>信息查询</title>
+	<link rel="stylesheet" type="text/css" href="../css/api.css" />
+	<link rel="stylesheet" type="text/css" href="../css/style.css" />
+	<link rel="stylesheet" href="../css/aui.2.0.css">
+	<link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css" />
+	<style>
+		#main {
+			background: #dfc7af;
+			color: #252525;
+		}
+
+		body {
+			background-color: #dfc7af;
+		}
+		/* mian部分 */
+		.aui-list .aui-list-header {
+			background-color: #59493f;
+			color: #dfc7af;
+		}
+
+		.aui-list .aui-list-item {
+			background-color: #dfc7af;
+			border-bottom: 1px solid #ccc;
+		}
+
+		.aui-list .aui-list-item div {
+			color: #59493f;
+		}
+
+		.aui-tab-item {
+			color: #59493f;
+			background-color: #dfc7af;
+		}
+
+		.aui-bar-btn-item.aui-active {
+			background-color: #59493f;
+		}
+		.aui-list .aui-list-item.last  {
+			border-bottom: 0;
+		}
+		.aui-bar-btn-item {
+			width: 50%;
+			height: 50px;
+			font-size: 18px;
+			font-weight: 700;
+			border: 1px solid #59493f;
+			background-color: #dfc7af;
+		}
+		.footer {
+			position: fixed;
+			bottom: 0;
+			width: 100%;
+			z-index: 9;
+		}
+		.footer .aui-bar-btn {
+			position: relative;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="wrap">
+		<div class="header">
+			<i tapmode onclick="api.closeWin();" class="fa fa-arrow-left"></i>
+
+			<div class="title">
+				录入订单
+			</div>
+		</div>
+		<div id="main">
+			<form class=""  method="post" id="ddForm">
+				<div class="aui-content aui-margin-b-15">
+					<ul class="aui-list aui-form-list">
+						<li class="aui-list-header">输入订单信息</li>
+						<li class="aui-list-item">
+							<div class="aui-list-item-inner">
+								<div class="aui-list-item-label">
+									品牌名称：
+								</div>
+								<div class="aui-list-item-input">
+									<input type="text" placeholder="请输入品牌名称 (如 '光之梦')" autofocus name="ppName" class="ppName">
+								</div>
+							</div>
+						</li>
+						<li class="aui-list-item">
+							<div class="aui-list-item-inner">
+								<div class="aui-list-item-label">
+									客户名称：
+								</div>
+								<div class="aui-list-item-input">
+									<input type="text" placeholder="请输入客户名称" autofocus name="khName" class="khName">
+								</div>
+							</div>
+						</li>
+						<li class="aui-list-item">
+							<div class="aui-list-item-inner">
+								<div class="aui-list-item-label">
+									订单号：
+								</div>
+								<div class="aui-list-item-input">
+									<input type="number" placeholder="输入订单号" name="ddId" class="ddId">
+								</div>
+							</div>
+						</li>
+						<li class="aui-list-item">
+							<div class="aui-list-item-inner">
+								<div class="aui-list-item-label">
+									数量(件)：
+								</div>
+								<div class="aui-list-item-input">
+									<input type="number" placeholder="数量 如'13" name="ddNum" class="ddNum">
+								</div>
+							</div>
+						</li>
+
+						<li class="aui-list-item">
+							<div class="aui-list-item-inner">
+								<div class="aui-list-item-label">
+									发货站点：
+								</div>
+								<div class="aui-list-item-input">
+									<select name = "startAddress" class="startAddress">
+										<option>欧拉灯饰武昌分部</option>
+										<option>欧拉灯饰汉口分部</option>
+										<option>欧拉灯饰汉阳分部</option>
+									</select>
+								</div>
+							</div>
+						</li>
+						<li class="aui-list-item">
+							<div class="aui-list-item-inner">
+								<div class="aui-list-item-label">
+									客户名称：
+								</div>
+								<div class="aui-list-item-input">
+									<input type="text" placeholder="请输入目的地" name="goAddress" class="startAddress">
+								</div>
+							</div>
+						</li>
+						<li class="aui-list-item">
+							<div class="aui-list-item-inner">
+								<div class="aui-list-item-label">
+									客户经理：
+								</div>
+								<div class="aui-list-item-input">
+									<input type="text" placeholder="数量 如'张三'" name="ddJingli" class="ddJingli">
+								</div>
+							</div>
+						</li>
+
+						<li class="aui-list-item last">
+							<div class="aui-list-item-inner">
+								<div class="aui-list-item-label last">
+									备注：
+								</div>
+								<div class="aui-list-item-input">
+									<textarea placeholder=""></textarea>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+			</form>
+			<div class="footer">
+				<!-- 底部确认取消按钮 -->
+				<div class="aui-bar aui-bar-btn" style="width:100%;">
+						<div class="aui-bar-btn-item aui-active" onclick="addDD();">确认</div>
+						<div class="aui-bar-btn-item">取消</div>
+				</div>
+
+			</div>
+
+		</div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../plugins/jquery/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="../script/common.js"></script>
+<script type="text/javascript">
+	var ppNames  = [ '光之梦','海之蓝','天之痕','水之皓' ];
+	apiready = function () {
+		$api.fixStatusBar($api.dom('.header'));
+	}
+	function addDD() {
+		console.log('666');
+		var formDate =	$('#ddForm').serializeObject();
+		console.log(JSON.stringify(formDate));
+		// 表单验证
+		if(!formDate.ppName || !ppNames.includes(formDate.ppName)) return alert('请输入正确的品牌名称');
+		if(!formDate.khName) return alert('请输入客户名称');
+		if(!formDate.ddId) return alert('请输订单编号');
+		if(!formDate.ddNum) return alert('请输入产品数量');
+		if(!formDate.startAddress) return alert('请输入起始地址');
+		if(!formDate.ddJingli) return alert('请输入客户经理');
+		formDate.ddStatus = '未完成';
+		formDate.whenToGo = new Date();
+		api.ajax({
+		    url: apiAddress + 'gb/save.do',
+		    method: 'post',
+		    data: {
+						body:{
+							tbname:'dd_info',
+							ppName:formDate.ppName,
+							khName:formDate.khName,
+							ddId:formDate.ddId,
+							ddNum:formDate.ddNum,
+							startAddress:formDate.startAddress,
+							whenToGo:formDate.whenToGo,
+							bzInfo:formDate.bzInfo,
+							ddJingli:formDate.ddJingli,
+							ddStatus:formDate.ddStatus
+						}
+		    }
+		},function(ret, err){
+		    if (ret) {
+		        if(ret.status =='0') {
+							api.toast({
+							    msg: '订单号已添加',
+							    duration: 2000,
+							    location: 'bottom'
+							});
+
+						}
+		    } else {
+		        alert( JSON.stringify( err ) );
+		    }
+		});
+
+	}
+</script>
+
+</html>

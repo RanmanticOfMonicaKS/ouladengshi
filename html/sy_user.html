@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport"
+		content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+	<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+	<title>我的</title>
+	<link rel="stylesheet" type="text/css" href="../css/api.css" />
+	<link rel="stylesheet" type="text/css" href="../css/style.css" />
+	<link rel="stylesheet" href="../css/aui.2.0.css">
+	<link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css" />
+	<style>
+		#wrap {
+			height: 100%;
+			position: relative;
+		}
+		#main {
+			background: #ccc;
+		}
+		.userInfo {
+			position: absolute;
+			left: 50%;
+			top:60;
+			width: 100%;
+			height:100px;
+			background-color: #dfc7af;
+			transform: translate(-50%,0);
+			padding-left: 20px;
+			padding-top: 20px;
+			margin-bottom: 10px;
+		}
+		.userInfo .img {
+			width: 50px;
+			height:50px;
+			background: url('../image/1.jpg') no-repeat;
+			background-size: 50px,50px;
+			border-radius: 5px;
+			margin-right: 10px;
+		}
+		.userInfo .text {
+			height:50px;
+			position: relative;
+
+		}
+		.text .title {
+			width: 300px;
+			position: absolute;
+			top: 0;
+
+		}
+		.subTitle {
+			width: 300px;
+			position: absolute;
+			bottom: 0;
+		}
+		/* 列表部分 */
+		.aui-list {
+			margin-top: 110px;
+			background-color: #dfc7af !important;
+			margin-bottom: 10px;
+		}
+
+		/* 退出按钮 */
+		.go_out {
+			position: relative;
+			height:50px;
+			background-color: #dfc7af;
+			color:#59493f;
+		}
+		.go_out .text {
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			transform: translate(-50%,-50%);
+		}
+	</style>
+</head>
+
+<body>
+	<div id="wrap"  class=>
+		<div class="header ">
+			<div class="title">
+				我的
+			</div>
+		</div>
+
+		<div id="main" class="flex-con">
+			<!-- NOTE: 头像部分 -->
+			<div class="userInfo">
+				<div class="img aui-pull-left" >
+
+				</div>
+				<div class="text aui-pull-left" >
+					<div class="title">
+							不曾相识
+					</div>
+					<div class="subTitle">
+						账号：18871471925
+					</div>
+				</div>
+			</div>
+			<ul class="aui-list aui-list-in">
+            <li class="aui-list-item">
+                <div class="aui-list-item-label-icon">
+                    <i class="fa fa-truck"></i>
+                </div>
+                <div class="aui-list-item-inner" tapmode  data-url="sy_ys_edit">
+                    录入运输信息
+                </div>
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-label-icon">
+                    <i class="fa fa-pencil-square-o"></i>
+                </div>
+                <div class="aui-list-item-inner" tapmode  data-url="input_list">
+                    添加订单
+                </div>
+            </li>
+						<li class="aui-list-item">
+                <div class="aui-list-item-label-icon">
+                    <i class="fa fa-users"></i>
+                </div>
+                <div class="aui-list-item-inner" tapmode  data-url="add_kh">
+                    添加客户
+                </div>
+            </li>
+						<li class="aui-list-item">
+                <div class="aui-list-item-label-icon">
+                    <i class="fa fa-cubes"></i>
+                </div>
+                <div class="aui-list-item-inner" tapmode  data-url="kc_table">
+                    库存
+                </div>
+            </li>
+						<li class="aui-list-item">
+                <div class="aui-list-item-label-icon">
+                    <i class="fa fa-area-chart"></i>
+                </div>
+                <div class="aui-list-item-inner" tapmode  data-url="sy_menu_price">
+                    价格表
+                </div>
+            </li>
+        </ul>
+			<div class="go_out" tapmode onclick="goOut();">
+				<div class="text">
+					切换用户
+				</div>
+			</div>
+		</div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../plugins/doT.min.js"></script>
+<script type="text/javascript" src="../plugins/jquery/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="../script/common.js"></script>
+<script type="text/javascript">
+	 // 跳转地址
+	 var url;
+	apiready = function () {
+		$api.fixStatusBar($api.dom('.header'));
+
+		api.setScreenOrientation({
+			orientation: 'auto_portrait'
+		});
+		goToFrame();
+	}
+	// 定义跳转frame的方法
+	function goToFrame() {
+	 	$('.aui-list-item-inner').on('click',function(){
+		 url = $(this).data('url');
+		 console.log(JSON.stringify(url));
+
+		 api.openWin({
+ 		    name: url,
+ 		    url: url+'.html',
+ 		    rect: {
+ 		        x: 0,
+ 		        y: 0,
+ 		        w: 'auto',
+ 		        h: 'auto'
+
+ 		    },
+ 		    pageParam: {
+ 		        name: 'test'
+ 		    },
+ 		    bounces: true,
+ 		    bgColor: 'rgba(0,0,0,0)',
+ 		    vScrollBarEnabled: true,
+ 		    hScrollBarEnabled: true
+ 		});
+	 });
+	}
+	// 添加切换用户动能
+	function goOut () {
+		$api.rmStorage('userInfo');
+		api.openWin({
+		    name: 'login',
+		    url: './login.html',
+		    rect: {
+		        x: 0,
+		        y: 0,
+		        w: 'auto',
+		        h: 'auto'
+		    },
+		    pageParam: {
+		        name: 'test'
+		    },
+		    bounces: true,
+		    bgColor: 'rgba(0,0,0,0)',
+		    vScrollBarEnabled: true,
+		    hScrollBarEnabled: true
+		});
+		api.closeWin();
+
+
+	}
+</script>
+
+</html>

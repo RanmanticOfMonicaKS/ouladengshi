@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- <link rel="stylesheet" type="text/css" href="../plugins/weui/lib/weui.min.css"/> -->
+    <!-- <link rel="stylesheet" type="text/css" href="../plugins/weui/css/jquery-weui.min.css"/> -->
+    <link rel="stylesheet" type="text/css" href="../css/aui.2.0.css" />
+    <!-- <link rel="stylesheet" href="../css/aui.css"> -->
+    <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css" />
+    <link rel="stylesheet" href="../plugins/labelauty/css/jquery-labelauty.css">
+    <title>Document</title>
+    <style>
+        body {
+            background-color: #dfc7af;
+        }
+
+        .aui-list .aui-list-header {
+            background-color: #59493f;
+            color: #dfc7af;
+        }
+
+        .aui-list .aui-list-item {
+            background-color: #dfc7af;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .aui-list .aui-list-item div {
+            color: #59493f;
+        }
+
+        /* .aui-list-item-input span {
+            width: 20px;
+            height: 20px;
+            display: block;
+        } */
+        .aui-list-item-input {
+            position: relative;
+        }
+
+        .aui-list-item-input span {
+            position: absolute;
+            left: 180px;
+            top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrap">
+        <div class="aui-content aui-margin-b-15">
+            <ul class="aui-list aui-form-list">
+                <li class="aui-list-header">输入订单信息</li>
+                <li class="aui-list-item">
+                    <div class="aui-list-item-inner">
+                        <div class="aui-list-item-label">
+                            订单号：
+                        </div>
+                        <div class="aui-list-item-input">
+                            <input type="number" placeholder="已存在订单，请点击右上角'更新运输信息'" class="ddId">
+                        </div>
+                    </div>
+                </li>
+                <!-- <li class="aui-list-item">
+					<div class="aui-list-item-inner">
+						<div class="aui-list-item-label">
+							Radio
+						</div>
+						<div class="aui-list-item-input">
+							<label><input class="aui-radio" type="radio" name="demo1" checked> 选项一</label>
+							<label><input class="aui-radio" type="radio" name="demo1"> 选项二</label>
+						</div>
+					</div>
+				</li> -->
+                <li class="aui-list-item">
+                    <div class="aui-list-item-inner">
+                        <div class="aui-list-item-label">
+                            运输起点：
+                        </div>
+                        <div class="aui-list-item-input">
+                            <select class="startAddress">
+                                <option>欧拉灯饰武昌分部</option>
+                                <option>欧拉灯饰汉口分部</option>
+                                <option>欧拉灯饰汉阳分部</option>
+                            </select>
+                            <span class="fa fa-chevron-down "></span>
+                        </div>
+                    </div>
+                </li>
+                <li class="aui-list-item">
+                    <div class="aui-list-item-inner">
+                        <div class="aui-list-item-label">
+                            运输终点：
+                        </div>
+                        <div class="aui-list-item-input">
+                            <input type="text" placeholder="请输入目的地" class="goAddress">
+                        </div>
+                    </div>
+                </li>
+                <li class="aui-list-item">
+                    <div class="aui-list-item-inner">
+                        <div class="aui-list-item-label">
+                            当前位置：
+                        </div>
+                        <div class="aui-list-item-input">
+                            <input type="text" placeholder="请输入当前位置" class="currentAddress">
+                        </div>
+                    </div>
+                </li>
+
+                <li class="aui-list-item">
+                    <div class="aui-list-item-inner">
+                        <div class="aui-list-item-label last">
+                            备注：
+                        </div>
+                        <div class="aui-list-item-input">
+                            <textarea placeholder="" class="bzInfo"></textarea>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<!-- <script type="text/javascript" src="../plugins/doT.min.js"></script> -->
+<script type="text/javascript" src="../plugins/jquery/jquery-1.9.1.min.js"></script>
+<script src="../plugins/aui/aui-tab.js"></script>
+<!-- <script type="text/javascript" src="../plugins/weui/js/jquery-weui.min.js"></script> -->
+<script src="../plugins/labelauty/js/jquery-labelauty.js"></script>
+<script type="text/javascript" src="../script/common.js"></script>
+<script type="text/javascript" src="../script/json.js"></script>
+<script>
+    $(function () {
+        // 需要更新的订单id
+        var ddId = 1;
+        apiready = function () {
+            // 监听input页面传递的toupdate事件，赋值给你表单 
+            //如果ddId存在，表示页面加载完毕，那么我是不是可以这么做 此方法不可用
+            // 是不是只要存在api的时候这里就能够得到api是否就能够间听到的事件loaded .. 
+
+            //发送信号给window已经完成页面
+            api.sendEvent({
+                name: 'loaded'
+            });
+
+            /*       api.addEventListener({
+
+                      name: 'toUpdate'
+                  }, function(ret, err){
+                      // 监听到事件
+                      console.log('监听到了toUpdate事件');
+                      
+                      console.log( JSON.stringify(ret) );
+                      ddId = ret.key;
+                      $('.ddId').val(ddId);
+                  }); */
+            // 同级页面无法监听到事件
+            api.addEventListener({
+                name: 'buttonClicked'
+            }, function (ret, err) {
+                console.log(JSON.stringify(ret)+'监听到button事件，准备更新数据');
+                // 同样的，两个都监听到都要设置，处理条件
+                if(ret.value.type == '2') {
+                    var ddId = $('.ddId').val();
+                    var currentAddress = $('.currentAddress').val();
+                    var bzInfo  = $('.bzInfo').val();
+                    // 发送ajax，进行数据更新
+                    api.ajax({
+                        url:  apiAddress + 'gb/update.do',
+                        method: 'post',
+                        timeout: 30,
+                        dataType: 'json',
+                        returnAll:false,
+                        data:{
+                            body: {
+                                ddId,
+                                currentAddress,
+                                bzInfo
+                            }
+                        }
+                    },function(ret,err){
+                        if (ret) {
+                            api.toast({
+                                msg: '订单信息已更新',
+                                duration: 2000,
+                                location: 'bottom'
+                            });
+                        } else {
+                            api.alert({
+                                msg:('错误码：'+err.code+'；错误信息：'+err.msg+'网络状态码：'+err.statusCode)
+                            });
+                        };
+                    });
+                }
+            });
+
+
+        }
+    })
+
+    //切换过来自动添加表单小功能，一天了。！
+    function autoFocus(index, $ddId) {
+        console.log('进入autoFocus:' + $ddId);
+        $('.ddId').val($ddId).focus();
+    }
+    // 添加提交表单进行更新功能。
+    // 监听，点击按钮事件，发送ajax进行操作
+
+</script>
+
+</html>

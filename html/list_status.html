@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport"
+		content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+	<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+	<title>订单状态</title>
+	<link rel="stylesheet" type="text/css" href="../css/api.css" />
+	<link rel="stylesheet" type="text/css" href="../css/style.css" />
+	<link rel="stylesheet" href="../css/aui.2.0.css">
+	<link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css" />
+	<style>
+	 #wrap {
+	 		height:100%;
+			background-color: #59493f;
+			background: url('../image/bg3.jpg') no-repeat;
+			background-size: cover;
+	 }
+		#main {
+			height:50%;
+			color: #252525;
+		}
+		.ys-info-item {
+			background-color: #dfc7af;
+			margin-bottom: 10px;
+			border-radius: 10px;
+			padding: 5px;
+			box-shadow:-3px 3px 0px lightyellow;
+		}
+
+		.ys-ret {
+			padding-left: 10px;
+			background-color: gold;
+			margin-bottom: 10px;
+			border-radius: 5px;
+			box-shadow:-1px 1px 0px lightyellow;
+		}
+		.aui-col-xs-6 {
+			background-color: #dfc7af;
+
+		}
+		.aui-row-padded [class*=aui-col-xs-] {
+			padding: 5px 0px 5px 10px;
+			color:#252525;
+		}
+		.aui-col-xs-6 i {
+			font-style: normal;
+			color:chocolate;
+		}
+		.tempList {
+			padding: 20px 10px 0px 10px;
+		}
+
+
+	</style>
+</head>
+
+<body>
+	<div id="wrap" class="flex-wrap flex-vertical">
+		<div class="header">
+			<i  onclick="closeWin();" class="fa fa-arrow-left"></i>
+			<div class="title">
+				订单状态
+			</div>
+		</div>
+		<div id="main">
+
+		</div>
+		<div class="tempList">
+
+		</div>
+	</div>
+	<script type="text/template" id="tempList">
+		<ul>
+		{{~it.data:value:index }}
+			<li class="ys-info-item  aui-row-padded clearfix">
+				<span class="aui-col-xs-6">品牌名称：<i>{{= value.ppname }}</i></span>
+				<span class="aui-col-xs-6">订单编号：<i>{{= value.ddid }}</i> </span>
+				<span class="aui-col-xs-6">订购数量：<i>{{= value.ddnum }}</i> </span>
+				<span class="aui-col-xs-6">订单状态：<i>{{= value.ddstatus }}</i> </span>
+			</li>
+			{{~ }}
+
+		</ul>
+	</script>
+
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../plugins/jquery/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="../script/common.js"></script>
+<script src="../plugins/echarts.min.js" charset="utf-8"></script>
+<script src="../plugins/doT.min.js" charset="utf-8"></script>
+<script>
+  var myChart = echarts.init(document.getElementById('main'),'vintage');
+	option = {
+	    backgroundColor: '#2c343c',
+
+	    title: {
+	        text: '订单状态分布',
+	        left: 'center',
+	        top: 20,
+	        textStyle: {
+	            color: '#ccc'
+	        }
+	    },
+
+	    tooltip : {
+	        trigger: 'item',
+	        formatter: "{a} <br/>{b} : {c} ({d}%)"
+	    },
+		 color: ['#dd6b66','#759aa0','#e69d87','#8dc1a9','#ea7e53','#eedd78','#73a373','#73b9bc','#7289ab', '#91ca8c','#f49f42'],
+	    visualMap: {
+	        show: false,
+	        min: 80,
+	        max: 600,
+	        inRange: {
+	            colorLightness: [0, 1]
+	        }
+	    },
+	    series : [
+	        {
+	            name:'访问来源',
+	            type:'pie',
+	            radius : '55%',
+	            center: ['50%', '50%'],
+	            data:[
+	                {value:300, name:'已完成'},
+	                {value:200, name:'预订'},
+	                {value:100, name:'未完成'},
+	            ].sort(function (a, b) { return a.value - b.value; }),
+	            roseType: 'radius',
+	            label: {
+	                normal: {
+	                    textStyle: {
+	                        color: 'rgba(255, 255, 255, 0.3)'
+	                    }
+	                }
+	            },
+	            labelLine: {
+	                normal: {
+	                    lineStyle: {
+	                        color: 'rgba(255, 255, 255, 0.3)'
+	                    },
+	                    smooth: 0.2,
+	                    length: 10,
+	                    length2: 20
+	                }
+	            },
+	            itemStyle: {
+	                normal: {
+	                    shadowBlur: 200,
+	                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+	                }
+	            },
+
+	            animationType: 'scale',
+	            animationEasing: 'elasticOut',
+	            animationDelay: function (idx) {
+	                return Math.random() * 200;
+	            }
+	        }
+	    ]
+	};
+myChart.setOption(option);
+// 添加事件
+myChart.on('click',function(params) {
+		  //  alert("单击了"+params.componentType+"x轴标签"+params.value+';'+params.name);
+		var ddStatus = params.name;
+		// 发送ajax得到数据
+		api.ajax({
+		    url: apiAddress+'api.do',
+		    method: 'post',
+		    data: {
+					body:{
+						gb_name: 'queryBiz.list#ks_getDDInfo_byCondition',
+						param_info: {
+								ddStatus
+						}
+
+					}
+		    }
+		},function(ret, err){
+		    if (ret) {
+					console.log(JSON.stringify(ret));
+						tempData = {
+								data: ret.param_info.records
+						};
+						var tmpText = doT.template($('#tempList').text());
+						$('.tempList').html(tmpText(tempData));
+		    } else {
+		        alert( JSON.stringify( err ) );
+		    }
+		});
+
+})
+</script>
+
+</html>
